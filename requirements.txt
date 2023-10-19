@@ -1,0 +1,14 @@
+scipy
+numpy
+matplotlib
+scikit-learn
+scikit-image
+keras
+tensorflow
+fastkde
+sgtl
+pandas
+faiss-cpu
+pyparsing
+six
+stag=1.2.1
