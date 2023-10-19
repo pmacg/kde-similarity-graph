@@ -19,10 +19,6 @@ static long INTERVAL_MIN_LENGTH = 1000;
 // Define the number of worker threads;
 static long WORKER_THREADS = 30;
 
-// Define a threshold parameter below which we do not keep weights for the
-// direct similarity graph
-static double SIM_THRESH = 0.8;
-
 // Define a struct describing some 'interval' of the indices of the data points.
 // We actually define this as just a vector of indices for the points.
 // This means that an 'interval' need not be a consecutive list of points

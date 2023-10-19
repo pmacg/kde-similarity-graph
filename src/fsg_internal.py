@@ -379,6 +379,18 @@ def fast_similarity_graph(points, sigma, solver):
 def fast_similarity_graph_debug(points, sigma, solver):
     return _fsg_internal.fast_similarity_graph_debug(points, sigma, solver)
 
+def generateRandomPoints(numPoints, numDimensions):
+    return _fsg_internal.generateRandomPoints(numPoints, numDimensions)
+
+def readDataFromFile(filename):
+    return _fsg_internal.readDataFromFile(filename)
+
+def computeDegreesNaively(points, sigma):
+    return _fsg_internal.computeDegreesNaively(points, sigma)
+
+def adjacencyToLaplacian(adj_mat):
+    return _fsg_internal.adjacencyToLaplacian(adj_mat)
+
 def sprsMatValues(matrix):
     return _fsg_internal.sprsMatValues(matrix)
 

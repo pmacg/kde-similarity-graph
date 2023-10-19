@@ -41,5 +41,3 @@
 
 # Ignore built binaries
 **/*.pyd
-
-

@@ -11,8 +11,7 @@
 #ifdef DEBUG
 #define DEBUG_MSG(fmt, ...) { fprintf(stderr, fmt, __VA_ARGS__); }
 #else
-//#define DEBUG_MSG(fmt, ...) { }
-#define DEBUG_MSG(fmt, ...) { fprintf(stderr, fmt, __VA_ARGS__); }
+#define DEBUG_MSG(fmt, ...) { }
 #endif
 #ifdef TRACE
 #define DEBUG_MSG(fmt, ...) { fprintf(stderr, fmt, __VA_ARGS__); }

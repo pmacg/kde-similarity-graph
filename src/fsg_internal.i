@@ -10,6 +10,7 @@
     #include <Eigen/Core>
     #include "cpp/fsg.h"
     #include "cpp/kde.h"
+    #include "cpp/utilities.h"
     #include "cpp/stag_lib/utility.h"
     #include "cpp/stag_lib/graph.h"
 %}
@@ -37,6 +38,7 @@ namespace std {
 // Include the other fsg headers
 %include "cpp/kde.h"
 %include "cpp/fsg.h"
+%include "cpp/utilities.h"
 
 // Include the stag utilities to allow to convert between SprsMat and scipy
 // sparse matrices.

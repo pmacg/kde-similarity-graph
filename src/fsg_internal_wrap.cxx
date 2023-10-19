@@ -3236,6 +3236,7 @@ namespace swig {
     #include <Eigen/Core>
     #include "cpp/fsg.h"
     #include "cpp/kde.h"
+    #include "cpp/utilities.h"
     #include "cpp/stag_lib/utility.h"
     #include "cpp/stag_lib/graph.h"
 
@@ -5864,6 +5865,22 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
     return SWIG_ERROR;
   if (val) *val = r ? true : false;
   return SWIG_OK;
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_int (PyObject * obj, int *val)
+{
+  long v;
+  int res = SWIG_AsVal_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < INT_MIN || v > INT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< int >(v);
+    }
+  }  
+  return res;
 }
 
 
@@ -10732,6 +10749,122 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_generateRandomPoints(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  Eigen::MatrixXd result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "generateRandomPoints", 2, 2, swig_obj)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "generateRandomPoints" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "generateRandomPoints" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = generateRandomPoints(arg1,arg2);
+  {
+    ConvertFromEigenToNumPyMatrix<Eigen::MatrixXd>(&resultobj, &result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_readDataFromFile(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  Eigen::MatrixXd result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "readDataFromFile" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "readDataFromFile" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::string * >(argp1);
+  result = readDataFromFile((std::string const &)*arg1);
+  {
+    ConvertFromEigenToNumPyMatrix<Eigen::MatrixXd>(&resultobj, &result);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_computeDegreesNaively(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Eigen::MatrixXd *arg1 = 0 ;
+  double arg2 ;
+  Eigen::MatrixXd temp1 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  std::vector< double,std::allocator< double > > result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "computeDegreesNaively", 2, 2, swig_obj)) SWIG_fail;
+  {
+    // In: const&
+    ConvertFromNumpyToEigenMatrix<Eigen::MatrixXd>(&temp1, swig_obj[0]);
+    arg1 = &temp1;
+  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "computeDegreesNaively" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  result = computeDegreesNaively((Eigen::MatrixXd const &)*arg1,arg2);
+  resultobj = swig::from(static_cast< std::vector< double,std::allocator< double > > >(result));
+  
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_adjacencyToLaplacian(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SprsMat *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  SprsMat result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_SprsMat,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "adjacencyToLaplacian" "', argument " "1"" of type '" "SprsMat &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "adjacencyToLaplacian" "', argument " "1"" of type '" "SprsMat &""'"); 
+  }
+  arg1 = reinterpret_cast< SprsMat * >(argp1);
+  result = adjacencyToLaplacian(*arg1);
+  resultobj = SWIG_NewPointerObj((new SprsMat(static_cast< const SprsMat& >(result))), SWIGTYPE_p_SprsMat, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_sprsMatValues(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   SprsMat *arg1 = (SprsMat *) 0 ;
@@ -11148,6 +11281,10 @@ static PyMethodDef SwigMethods[] = {
 	 { "IFGT_swiginit", IFGT_swiginit, METH_VARARGS, NULL},
 	 { "fast_similarity_graph", _wrap_fast_similarity_graph, METH_VARARGS, NULL},
 	 { "fast_similarity_graph_debug", _wrap_fast_similarity_graph_debug, METH_VARARGS, NULL},
+	 { "generateRandomPoints", _wrap_generateRandomPoints, METH_VARARGS, NULL},
+	 { "readDataFromFile", _wrap_readDataFromFile, METH_O, NULL},
+	 { "computeDegreesNaively", _wrap_computeDegreesNaively, METH_VARARGS, NULL},
+	 { "adjacencyToLaplacian", _wrap_adjacencyToLaplacian, METH_O, NULL},
 	 { "sprsMatValues", _wrap_sprsMatValues, METH_O, NULL},
 	 { "sprsMatInnerIndices", _wrap_sprsMatInnerIndices, METH_O, NULL},
 	 { "sprsMatOuterStarts", _wrap_sprsMatOuterStarts, METH_O, NULL},
