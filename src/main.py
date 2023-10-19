@@ -46,6 +46,7 @@ def two_moons_experiment():
         "FAISS Exact": (lambda ds: clusteralgs.faiss_exact_spectral_cluster(ds, k)),
         "FAISS HNSW": (lambda ds: clusteralgs.faiss_hnsw_spectral_cluster(ds, k)),
         "FAISS IVF": (lambda ds: clusteralgs.faiss_ivf_spectral_cluster(ds, k)),
+        "SZ": (lambda ds: clusteralgs.sz_spectral_cluster(ds, k, gamma=200)),
         "IFGT FSC": (lambda ds: clusteralgs.fast_spectral_cluster_ifgt(ds, k, 0.1)),
     }
 
@@ -55,6 +56,7 @@ def two_moons_experiment():
         "FAISS Exact": float('inf'),
         "FAISS HNSW": float('inf'),
         "FAISS IVF": float('inf'),
+        "SZ": float('inf'),
         "IFGT FSC": float('inf'),
     }
 
@@ -64,6 +66,7 @@ def two_moons_experiment():
         "FAISS Exact": 120,
         "FAISS HNSW": 120,
         "FAISS IVF": 120,
+        "SZ": 120,
         "IFGT FSC": 120,
     }
 
@@ -97,7 +100,7 @@ def two_moons_experiment():
         pickle.dump(experimental_data, fout)
 
 
-def two_moons_experiment_plot():
+def two_moons_experiment_plot(save=False):
     with open(os.path.join(PARENT_DIR, "results/twomoons/results.pickle"), 'rb') as fin:
         experimental_data = pickle.load(fin)
 
@@ -106,6 +109,7 @@ def two_moons_experiment_plot():
                    'FAISS Exact': '\\textsc{FAISS Exact}',
                    'FAISS HNSW': '\\textsc{FAISS HNSW}',
                    'FAISS IVF': '\\textsc{FAISS IVF}',
+                   'SZ': '\\textsc{SZ}',
                    'IFGT FSC': '\\textsc{Our Algorithm}',
                    }
 
@@ -114,6 +118,7 @@ def two_moons_experiment_plot():
                      'FAISS Exact': 'dashed',
                      'FAISS HNSW': 'dotted',
                      'FAISS IVF': 'solid',
+                     'SZ': 'dotted',
                      'IFGT FSC': 'solid',
                      }
 
@@ -122,6 +127,7 @@ def two_moons_experiment_plot():
                  'FAISS Exact': 'green',
                  'FAISS HNSW': 'green',
                  'FAISS IVF': 'green',
+                 'SZ': 'black',
                  'IFGT FSC': 'red',
                  }
 
@@ -151,7 +157,8 @@ def two_moons_experiment_plot():
     ax.set_ylim(0, 80)
     ax.set_xlim(0, 100000)
     plt.grid(True, which='both', linestyle='--', alpha=0.7)
-
+    if save:
+        plt.savefig(os.path.join(PARENT_DIR, "results/figures/twomoons.pdf"))
     plt.show()
 
     # Display the results
@@ -180,7 +187,8 @@ def two_moons_experiment_plot():
     ax.set_ylim(0, 80)
     ax.set_xlim(0, 20000)
     plt.grid(True, which='both', linestyle='--', alpha=0.7)
-
+    if save:
+        plt.savefig(os.path.join(PARENT_DIR, "results/figures/twomoonssmall.pdf"))
     plt.show()
 
 
@@ -194,6 +202,7 @@ def bsds_experiment(image_idx, full_resolution=True):
         "IFGT FSC": (lambda ds, k: clusteralgs.fast_spectral_cluster_ifgt(ds, k, gamma)),
         "FAISS Exact": (lambda ds, k: clusteralgs.faiss_exact_spectral_cluster(ds, k)),
         "FAISS HNSW": (lambda ds, k: clusteralgs.faiss_hnsw_spectral_cluster(ds, k)),
+        "SZ": (lambda ds, k: clusteralgs.sz_spectral_cluster(ds, k, gamma)),
         "FAISS IVF": (lambda ds, k: clusteralgs.faiss_ivf_spectral_cluster(ds, k)),
     }
 
@@ -205,8 +214,8 @@ def bsds_experiment(image_idx, full_resolution=True):
     for num_vertices in sizes:
         experimental_data = {}
         for alg_name, func in algorithms_to_compare.items():
-            if num_vertices != downsample_size and alg_name == "Scipy RBF":
-                # Ignore the full resolution image for SKLearn RBF
+            if num_vertices != downsample_size and (alg_name == "Scipy RBF" or alg_name == "SZ"):
+                # Ignore the full resolution image for SKLearn RBF and SZ
                 continue
             experimental_data[alg_name] = []
 
