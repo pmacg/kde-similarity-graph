@@ -41,3 +41,9 @@
 
 # Ignore built binaries
 **/*.pyd
+
+# Ignore saved results
+**/*.pickle
+
+# Ignore extraced BSDS data
+data/bsds/BSR

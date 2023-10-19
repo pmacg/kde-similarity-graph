@@ -122,7 +122,7 @@ class TwoMoonsDataset(Dataset):
 class BSDSDataset(Dataset):
 
     def __init__(self, img_idx, max_vertices=None,
-                 data_directory="../data/bsds/BSR/BSDS500/data/",
+                 data_directory=os.path.join(os.getcwd(), os.pardir, "data/bsds/BSR/BSDS500/data/"),
                  blur_variance=1):
         """Construct a dataset from a single image in the BSDS dataset.
 

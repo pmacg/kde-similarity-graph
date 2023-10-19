@@ -1,6 +1,7 @@
 """
 Run some spectral clustering experiments.
 """
+import os
 from time import time
 import matplotlib.ticker
 import numpy as np
@@ -18,6 +19,10 @@ import networkx as nx
 
 import warnings
 warnings.filterwarnings("ignore")
+
+
+SRC_DIR = os.getcwd()
+PARENT_DIR = os.path.abspath(os.path.join(SRC_DIR, os.pardir))
 
 
 class ExperimentRunData(object):
@@ -88,12 +93,12 @@ def two_moons_experiment():
         print("")
 
     # Save the results
-    with open("results/twomoons/results.pickle", 'wb') as fout:
+    with open(os.path.join(PARENT_DIR, "results/twomoons/results.pickle"), 'wb') as fout:
         pickle.dump(experimental_data, fout)
 
 
-def two_moons_experiment_plot(save=False):
-    with open("results/twomoons/results.pickle", 'rb') as fin:
+def two_moons_experiment_plot():
+    with open(os.path.join(PARENT_DIR, "results/twomoons/results.pickle"), 'rb') as fin:
         experimental_data = pickle.load(fin)
 
     algname_map = {'Scipy RBF': '\\textsc{SKLearn GK}',
@@ -147,9 +152,6 @@ def two_moons_experiment_plot(save=False):
     ax.set_xlim(0, 100000)
     plt.grid(True, which='both', linestyle='--', alpha=0.7)
 
-    if save:
-        plt.savefig("results/figures/twomoons_rebuttal.pdf")
-
     plt.show()
 
     # Display the results
@@ -179,13 +181,10 @@ def two_moons_experiment_plot(save=False):
     ax.set_xlim(0, 20000)
     plt.grid(True, which='both', linestyle='--', alpha=0.7)
 
-    if save:
-        plt.savefig("results/figures/twomoonssmall_rebuttal.pdf")
-
     plt.show()
 
 
-def bsds_experiment(image_idx):
+def bsds_experiment(image_idx, full_resolution=True):
     print(f"Clustering BSDS dataset image {image_idx}.")
     gamma = 0.2
 
@@ -199,9 +198,11 @@ def bsds_experiment(image_idx):
     }
 
     downsample_size = 20000
+    sizes = [downsample_size]
+    if full_resolution:
+        sizes.append(float('inf'))
 
-    # for num_vertices in [float('inf'), downsample_size]:
-    for num_vertices in [downsample_size]:
+    for num_vertices in sizes:
         experimental_data = {}
         for alg_name, func in algorithms_to_compare.items():
             if num_vertices != downsample_size and alg_name == "Scipy RBF":
@@ -225,14 +226,19 @@ def bsds_experiment(image_idx):
         print("")
 
         filename = f"results/bsds/{image_idx}{'_downsampled' if num_vertices == downsample_size else ''}.pickle"
-        with open(filename, 'wb') as fout:
+        with open(os.path.join(PARENT_DIR, filename), 'wb') as fout:
             pickle.dump(experimental_data, fout)
 
 
-def bsds_experiment_plot(image_idx, save=False):
-    with open(f"results/bsds/{image_idx}.pickle", 'rb') as fin:
-        experimental_data = pickle.load(fin)
-    with open(f"results/bsds/{image_idx}_downsampled.pickle", 'rb') as fin:
+def bsds_experiment_plot(image_idx):
+    full_resolution_file = os.path.join(PARENT_DIR, f"results/bsds/{image_idx}.pickle")
+    if os.path.isfile(full_resolution_file):
+        with open(os.path.join(PARENT_DIR, f"results/bsds/{image_idx}.pickle"), 'rb') as fin:
+            experimental_data = pickle.load(fin)
+    else:
+        experimental_data = {}
+
+    with open(os.path.join(PARENT_DIR, f"results/bsds/{image_idx}_downsampled.pickle"), 'rb') as fin:
         downsampled_data = pickle.load(fin)
 
     # Default to the downsampled data, otherwise use full-resolution
@@ -259,11 +265,6 @@ def bsds_experiment_plot(image_idx, save=False):
         if len(data) > 0:
             data[-1].dataset.show_image(labels=data[-1].labels)
 
-            # Save the current figure
-            if save:
-                plt.savefig(f"results/figures/{image_idx}_{alg_to_file[alg_name]}.png",
-                            bbox_inches='tight')
-
             # Show the current figure
             print(f"Plotting segmentation from {alg_name}...")
             plt.show()
@@ -274,14 +275,11 @@ def bsds_experiment_plot(image_idx, save=False):
 
     print("Plotting original image...")
     best_image_dataset.show_image()
-    if save:
-        plt.savefig(f"results/figures/{image_idx}_orig.png",
-                    bbox_inches='tight')
     plt.show()
 
 
 def bsds_experiment_ari(image_idx):
-    with open(f"results/bsds/{image_idx}_downsampled.pickle", 'rb') as fin:
+    with open(os.path.join(PARENT_DIR, f"results/bsds/{image_idx}_downsampled.pickle"), 'rb') as fin:
         experimental_data = pickle.load(fin)
 
     aris = {}
@@ -351,7 +349,7 @@ def main():
         if args.command == 'run':
             two_moons_experiment()
         elif args.command == 'plot':
-            two_moons_experiment_plot(save=True)
+            two_moons_experiment_plot()
 
     ########################
     # BSDS
@@ -361,9 +359,8 @@ def main():
             if not args.id:
                 full_bsds_experiment()
             else:
-                bsds_experiment(int(args.id))
+                bsds_experiment(int(args.id), full_resolution=True)
         elif args.command == 'plot':
-            all_bsds_aris()
             if not args.id:
                 print("Must specify --id argument to plot BSDS image result.")
             else:
