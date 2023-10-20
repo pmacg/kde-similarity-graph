@@ -1,15 +1,19 @@
 """
 Several variants of spectral clustering that we would like to compare.
 """
+import networkx
 from sklearn.cluster import KMeans, SpectralClustering
+from sklearn.neighbors import kneighbors_graph
 from sklearn.metrics.pairwise import rbf_kernel
 import scipy.linalg
 import scipy.sparse.linalg
+import sgtl
 
 import datasets
 import fsg_internal
 import math
 import numpy as np
+import networkx as nx
 import faiss
 import stag.graph
 
@@ -102,6 +106,7 @@ def sample_neighbours(adj, i, num):
 
 
 def construct_sz_graph(dataset: datasets.Dataset, gamma=1.0):
+    # Not the most efficient implementation, but good enough to see the results.
     n = dataset.num_data_points
     kernel_matrix = rbf_kernel(dataset.raw_data, gamma=gamma)
 
