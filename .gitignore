@@ -44,6 +44,7 @@
 
 # Ignore saved results
 **/*.pickle
+results/figures/
 
 # Ignore extraced BSDS data
 data/bsds/BSR
