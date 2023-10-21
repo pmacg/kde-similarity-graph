@@ -54,7 +54,7 @@ def kmeans(data, k):
     """
     Apply the kmeans algorithm to the given data, and return the labels.
     """
-    kmeans_obj = KMeans(n_clusters=k)
+    kmeans_obj = KMeans(n_clusters=k, n_init=10)
     kmeans_obj.fit(data)
     return kmeans_obj.labels_, kmeans_obj.cluster_centers_
 
@@ -86,7 +86,7 @@ def fast_spectral_cluster_ifgt(dataset: datasets.Dataset, k, gamma=1.0):
     adj_mat = fsg_internal.fast_similarity_graph(dataset.raw_data, gamma, kdesolver)
     lap_mat = swig_sprs_to_scipy(fsg_internal.adjacencyToLaplacian(adj_mat))
     _, eigenvectors = scipy.sparse.linalg.eigsh(lap_mat, k, which='SM')
-    labels = KMeans(n_clusters=k).fit_predict(eigenvectors)
+    labels = KMeans(n_clusters=k, n_init=10).fit_predict(eigenvectors)
     return labels
 
 
@@ -124,7 +124,7 @@ def sz_spectral_cluster(dataset: datasets.Dataset, k, gamma=1.0):
     g = construct_sz_graph(dataset, gamma=gamma)
     lap_mat = g.laplacian()
     _, eigenvectors = scipy.sparse.linalg.eigsh(lap_mat, k, which='SM')
-    labels = KMeans(n_clusters=k).fit_predict(eigenvectors)
+    labels = KMeans(n_clusters=k, n_init=10).fit_predict(eigenvectors)
     return labels
 
 
@@ -142,7 +142,7 @@ def faiss_exact_spectral_cluster(dataset: datasets.Dataset, k: int):
     g = stag.graph.Graph(adj_mat)
     lap_mat = g.laplacian()
     _, eigenvectors = scipy.sparse.linalg.eigsh(lap_mat, k, which='SM')
-    labels = KMeans(n_clusters=k).fit_predict(eigenvectors)
+    labels = KMeans(n_clusters=k, n_init=10).fit_predict(eigenvectors)
     return labels
 
 
@@ -162,7 +162,7 @@ def faiss_ivf_spectral_cluster(dataset: datasets.Dataset, k: int):
     g = stag.graph.Graph(adj_mat)
     lap_mat = g.laplacian()
     _, eigenvectors = scipy.sparse.linalg.eigsh(lap_mat, k, which='SM')
-    labels = KMeans(n_clusters=k).fit_predict(eigenvectors)
+    labels = KMeans(n_clusters=k, n_init=10).fit_predict(eigenvectors)
     return labels
 
 
@@ -181,6 +181,6 @@ def faiss_hnsw_spectral_cluster(dataset: datasets.Dataset, k: int):
     g = stag.graph.Graph(adj_mat)
     lap_mat = g.laplacian()
     _, eigenvectors = scipy.sparse.linalg.eigsh(lap_mat, k, which='SM')
-    labels = KMeans(n_clusters=k).fit_predict(eigenvectors)
+    labels = KMeans(n_clusters=k, n_init=10).fit_predict(eigenvectors)
     return labels
 
