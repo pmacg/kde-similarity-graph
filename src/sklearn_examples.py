@@ -1,3 +1,4 @@
+import os
 import time
 import warnings
 
@@ -23,20 +24,11 @@ blobs = datasets.make_blobs(n_samples=n_samples, random_state=8)
 no_structure = np.random.rand(n_samples, 2), None
 
 # Anisotropicly distributed data
-X, y = datasets.make_blobs(n_samples=n_samples)
+X, y = datasets.make_blobs(n_samples=n_samples,
+                           centers=[[0,0],[10,10],[10,20]])
 transformation = [[0.6, -0.6], [-0.4, 0.8]]
 X_aniso = np.dot(X, transformation)
 aniso = (X_aniso, y)
-
-# blobs with varied variances
-varied = datasets.make_blobs(
-    n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5]
-)
-
-# View the problem datasets
-plt.scatter(aniso[0][:, 0], aniso[0][:, 1], s=1)
-plt.scatter(varied[0][:, 0], varied[0][:, 1], s=1)
-plt.show()
 
 # ============
 # Set up cluster parameters
@@ -91,18 +83,6 @@ datasets = [
             "rbf_gamma": 5,
         },
     ),
-    # (
-    #     varied,
-    #     {
-    #         "eps": 0.18,
-    #         "n_neighbors": 2,
-    #         "min_samples": 7,
-    #         "xi": 0.01,
-    #         "min_cluster_size": 0.2,
-    #         "gamma": 0.5,
-    #         "rbf_gamma": 5,
-    #     },
-    # ),
     (
         aniso,
         {
@@ -115,11 +95,6 @@ datasets = [
             "rbf_gamma": 5,
         },
     ),
-    # (blobs, {"min_samples": 7, "xi": 0.1, "min_cluster_size": 0.2,
-    #          "gamma": 0.2,
-    #          "rbf_gamma": 5,
-    #          }),
-    # (no_structure, {}),
 ]
 
 for i_dataset, (dataset, algo_params) in enumerate(datasets):
@@ -286,6 +261,5 @@ for i_dataset, (dataset, algo_params) in enumerate(datasets):
         )
         plot_num += 1
 
-plt.savefig("results/figures/comparison.pdf")
-plt.savefig("results/figures/comparison.png")
+plt.savefig(os.path.join(os.pardir, "results/figures/comparison.png"))
 plt.show()

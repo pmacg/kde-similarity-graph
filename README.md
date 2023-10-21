@@ -72,10 +72,10 @@ There are three experiments reported in the paper.
 ### Clustering comparison
 
 To run the experiments for and create a figure like Figure 1,
-run the `scipy_examples.py` script:
+run the `sklearn_examples.py` script:
 
 ```
-python3 fsg/scipy_examples.py
+python3 fsg/sklearn_examples.py
 ```
 
 Note that there is a parameter at the top of the script which allows you to select
