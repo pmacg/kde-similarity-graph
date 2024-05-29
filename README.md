@@ -45,12 +45,18 @@ cd ../..
 ```
 
 ### Compile the C++ Python extension
+First, create a new conda envorinment.
 
-In the root directory (the one containing this README file), run the following
+```bash
+conda create --name my-env
+conda activate my-env
+```
+
+Then, in the root directory (the one containing this README file), run the following
 commands:
 
 ```bash
-conda install --file requirements.txt
+pip install -r requirements.txt
 python setup.py build_ext --inplace
 ```
 
